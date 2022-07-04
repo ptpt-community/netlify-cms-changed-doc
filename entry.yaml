@@ -1,0 +1,201 @@
+swagger: "2.0"
+info:
+  description: "Simplified NetlifyCMS API"
+  version: "1.0.0"
+  title: "NetlifyCMS Edited API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "127.0.0.1:5001"
+basePath: "/"
+
+schemes:
+- "https"
+- "http"
+paths:
+  /entries:
+    get:
+      tags:
+      - "content"
+      summary: "Finds Posts by tags"
+      description: "Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing."
+      operationId: "findPetsByContent"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/entry"
+        "400":
+          description: "Invalid tag value"
+      deprecated: true
+      
+  /entries/{id}:
+    get:
+      tags:
+        - "content"
+      summary: "Read one entry"
+      description: "Returns a single content"
+      operationId: findContentsById
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: "id"
+          in: "path"
+          description: “read one entry"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            
+            items:
+              $ref: '#/definitions/entry'
+              
+              
+    delete:
+      tags:
+      - "content"
+      summary: "Deletes a content"
+      description: ""
+      operationId: "deleteContent"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Delete Content"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+              
+
+
+  
+  /entries/create:
+    post:
+      tags:
+      - "content"
+      summary: "Add a new content"
+      description: ""
+      operationId: "addContent"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Add new content"
+        required: true
+        schema:
+          $ref: "#/definitions/entry"
+      responses:
+        "405":
+          description: "Invalid input"
+          
+    put:
+      tags:
+      - "content"
+      summary: "Update an existing content"
+      description: ""
+      operationId: "updateContent"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Edit Content"
+        required: true
+        schema:
+          $ref: "#/definitions/entry"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+
+
+
+definitions:
+  entry: 
+    type: object
+    properties:
+      Id: 
+        type: string
+      name:
+        type: string
+        example: entry-01
+        items:
+          type: string
+      status:
+        type: string
+
+  PostParams:
+    type: "object"
+    properties: 
+     title:
+      type: "string"
+     image:
+      type: "string"
+     content:
+      type: "string"
+     name:
+      type: "string"
+  
+      
+  PageResponse:
+    type: "object"
+    properties: 
+     
+     data:
+      type: "string"
+     file:
+      type: "object"
+      properties:
+       schema:
+        $ref: "#/definitions/FilePath"
+
+  FilePath:
+    type: "object"
+    properties:
+     path: 
+      type: "string"
+     id:
+      type: "string"
+     
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
